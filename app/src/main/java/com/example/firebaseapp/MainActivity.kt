@@ -28,36 +28,14 @@ class MainActivity : AppCompatActivity() {
         binding.btnRegister.setOnClickListener {
             registerUser()
         }
-        binding.btnSignin.setOnClickListener {
+        /*binding.btnSignin.setOnClickListener {
             logInUser()
-        }
+        } */
     }
 
     override fun onStart() {
         super.onStart()
         checkLoggedInState()
-    }
-
-    private fun registerUser() {
-        val email = binding.etEmailRegister.text.toString()
-        val password = binding.etPasswordRegister.text.toString()
-
-        if (email.isNotEmpty() && password.isNotEmpty()){
-            CoroutineScope(Dispatchers.IO).launch {
-                try {
-
-                    auth.createUserWithEmailAndPassword(email,password).await()
-                    withContext(Dispatchers.Main){
-                        checkLoggedInState()
-                    }
-
-                }catch (e:Exception){
-                    withContext(Dispatchers.Main){
-                        Toast.makeText(this@MainActivity,e.message,Toast.LENGTH_LONG).show()
-                    }
-                }
-            }
-        }
     }
 
     private fun logInUser() {
@@ -81,6 +59,32 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+
+
+    private fun registerUser() {
+        val email = binding.etEmailRegister.text.toString()
+        val password = binding.etPasswordRegister.text.toString()
+
+        if (email.isNotEmpty() && password.isNotEmpty()){
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+
+                    auth.createUserWithEmailAndPassword(email,password).await()
+                    withContext(Dispatchers.Main){
+                        checkLoggedInState()
+                    }
+
+                }catch (e:Exception){
+                    withContext(Dispatchers.Main){
+                        Toast.makeText(this@MainActivity,e.message,Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+        }
+    }
+
+
 
     private fun checkLoggedInState(){
         if (auth.currentUser == null){
